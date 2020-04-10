@@ -22,9 +22,9 @@ import { simpleAI } from './players/SimpleAI';
 import { randomAI } from './players/randomAI';
 
 const simulationConfig: SimulationConfig = {
-    gamesToRun: 1000,
+    gamesToRun: 1,
     debugLogs: false,
-    playersConfig: [randomAI, randomAI, daggeAI, simpleAI]
+    playersConfig: [randomAI, randomAI, simpleAI, simpleAI, simpleAI]
 }
 
 /******************** NO NEED TO CHANGE ANY CODE BELOW THIS LINE **********************/
@@ -135,4 +135,10 @@ const startSim = function () {
         });
     }
     console.log(totals);
+
+    console.log('---average score per game---');
+
+    totals.forEach(score => {
+        console.log(score.playerId + ': ' + score.avgScorePerGame);
+    });
 }();

@@ -27,16 +27,15 @@ export const initRound = function (players: Array<Player>, amountOfCards: number
     const hands = new Array<PlayerHand>();    
     const deck = deckHelper.getDeck();
     deckHelper.shuffleDeck(deck);
+    console.log(deck);
 
     // give out player hands
-    players.forEach((player, index) => {        
-        let cards: Array<Card> = deck.splice(index, amountOfCards);
+    players.forEach((player, index) => {
+        let cards: Array<Card> = deck.splice(0, amountOfCards);
         const playerHand: PlayerHand = { playerId: player.id, hand: cards};
         hands.push(playerHand);
+        console.log(playerHand);
     });
-
-   // if(debugLog)console.log('--starting hands--');
-    //if(debugLog)console.log(hands);
 
     let sumOfBets = 0;
     let highestBet = 0;
@@ -127,7 +126,7 @@ export const initRound = function (players: Array<Player>, amountOfCards: number
                 playerRound.invalidCardPlayed += invalidCardPlayed;
             }
             
-            const indexOfCardToPlay = playerHand.hand.map(card => card.key).indexOf(cardToPlay.key);            
+            const indexOfCardToPlay = playerHand.hand.map(card => card.key).indexOf(cardToPlay.key);        
 
             // add the played to card to the current set
             roundState.currentSet.cardsPlayed.push({playedByPlayerId: player.id, card: cardToPlay})
