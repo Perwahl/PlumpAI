@@ -20,11 +20,12 @@ import { SimulationConfig } from './models/simulationConfig';
 import { daggeAI } from './players/daggeAI';
 import { simpleAI } from './players/SimpleAI';
 import { randomAI } from './players/randomAI';
+import { customAI } from './players/CUSTOMAI';
 
 const simulationConfig: SimulationConfig = {
-    gamesToRun: 1,
+    gamesToRun: 100,
     debugLogs: false,
-    playersConfig: [randomAI, randomAI, simpleAI, simpleAI, simpleAI]
+    playersConfig: [customAI, randomAI, simpleAI, simpleAI, simpleAI]
 }
 
 /******************** NO NEED TO CHANGE ANY CODE BELOW THIS LINE **********************/
@@ -52,7 +53,12 @@ const scoreRound = function (roundResult: Array<PlayerRoundState>, gameScore: Ar
             playerInGameScore = {
                 playerId: playerResult.playerId,
                 scores: [],
-                total: 0
+                total: 0,
+                zeroBetWins: 0,
+                fullBetWins: 0,
+                invalidBets: 0,
+                invalidCardPlays: 0,
+                plumps: 0
             }
             
             gameScore.push(playerInGameScore);
@@ -60,12 +66,23 @@ const scoreRound = function (roundResult: Array<PlayerRoundState>, gameScore: Ar
 
         // day of doooom
         if (playerResult.bet === playerResult.setsWon) {
+            if(playerResult.isFullBet){
+                playerInGameScore.fullBetWins++;
+            }
+            else if(playerResult.bet===0){
+                playerInGameScore.zeroBetWins++;
+            }
             const score = playerResult.isFullBet ? playerResult.bet + 20 : playerResult.bet + 10;            
              playerInGameScore.scores[roundNumber - 1] = playerResult.bet === 0 ? 5 : score;             
         }
         else {
+            if(playerResult.isFullBet){
+                playerInGameScore.plumps++;
+            }
             playerInGameScore.scores[roundNumber - 1] = 0;
         }
+        playerInGameScore.invalidBets+= playerResult.invalidBet;
+        playerInGameScore.invalidCardPlays+= playerResult.invalidCardPlayed;
 
         playerInGameScore.total  = playerInGameScore.scores.reduce((a, b) => a + b, 0);
     });
@@ -105,40 +122,49 @@ const startSim = function () {
     const totals = new Array<SimulationScore>();
     players.forEach(player => {       
         totals.push({
-            playerId : player.id,
-            scores : new Array<number>(), 
-            total: 0,
-            avgScorePerGame: 0,
-            plumpPercentage: 0,
-            zeroBetWinPercentage : 0,
-            fullSetWinPercentage : 0
+            playerId : player.id,            
+            totalScore: 0,           
+            totalPlumps: 0,
+            totalFullSetWins: 0,
+            totalZeroBetWins: 0,            
+            invalidBets: 0,
+            invalidCardPlays: 0
         })
     });
     const gamesToSimulate = simulationConfig.gamesToRun;
 
     for (let i = 0; i < gamesToSimulate; i++) {
-        //console.log("playing round " + i);
-        //console.log("players", players);
-
+       
         const result = letsPlay(players);
-        //console.log("result", result);
 
         result.forEach((playerResult: GameScore) => {
             const playerInGameScore = totals.find(item  => item.playerId === playerResult.playerId);
             if (playerInGameScore){
-                playerInGameScore.total += playerResult.total;
+                playerInGameScore.totalScore += playerResult.total;
+                playerInGameScore.invalidBets += playerResult.invalidBets;
+                playerInGameScore.invalidCardPlays += playerResult.invalidCardPlays;
+                playerInGameScore. totalPlumps += playerResult.plumps;
+                playerInGameScore. totalZeroBetWins += playerResult.zeroBetWins;
+                playerInGameScore. totalFullSetWins += playerResult.fullBetWins;
             }
-        });
-
-        totals.forEach(score => {
-            score.avgScorePerGame = score.total/gamesToSimulate;
-        });
+        });        
     }
-    console.log(totals);
-
-    console.log('---average score per game---');
+    //console.log(totals);
 
     totals.forEach(score => {
-        console.log(score.playerId + ': ' + score.avgScorePerGame);
+        console.log('---' + score.playerId + '---');
+        console.log('Plumps per game: ' +  score.totalPlumps/gamesToSimulate);
+        console.log('Zero bet wins per game: ' +  score.totalZeroBetWins/gamesToSimulate);
+        console.log('Full bet wins per game: ' +  score.totalFullSetWins/gamesToSimulate);
+        console.log('Invalid Bets: ' +  score.invalidBets);
+        console.log('Invalid Card Plays: ' +  score.invalidCardPlays);
+    });
+
+    console.log('-----------------');
+    
+
+    console.log('---average score per game---');
+    totals.forEach(score => {
+        console.log(score.playerId + ': ' + score.totalScore/gamesToSimulate);
     });
 }();

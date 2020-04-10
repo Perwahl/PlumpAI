@@ -26,15 +26,13 @@ export const initRound = function (players: Array<Player>, amountOfCards: number
     roundState.amountOfCards = amountOfCards;
     const hands = new Array<PlayerHand>();    
     const deck = deckHelper.getDeck();
-    deckHelper.shuffleDeck(deck);
-    console.log(deck);
+    deckHelper.shuffleDeck(deck);    
 
     // give out player hands
     players.forEach((player, index) => {
         let cards: Array<Card> = deck.splice(0, amountOfCards);
         const playerHand: PlayerHand = { playerId: player.id, hand: cards};
-        hands.push(playerHand);
-        console.log(playerHand);
+        hands.push(playerHand);        
     });
 
     let sumOfBets = 0;
