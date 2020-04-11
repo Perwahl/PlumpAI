@@ -12,8 +12,11 @@ Plump AI runs on Node.js and is writen in TypeScript
 4. Run 'npm install' in the terminal to install any dependencies
 
 To make it easer to run typescript you can install ts-node and typescript globally:
+
 run these in the terminal
+
 'npm install -g ts-node'
+
 'npm install -g typescript'
 
 now you can run the simulation with:
