@@ -53,7 +53,24 @@ export const getLowestValue = function (hand: Array<Card>) {
 	return lowestCard;
 }
 
-// returns all card of given suit. 
+// returns all cards of a higher value than the specified value
+export const cardsHigherValueThan = function (cardSet: Array<Card>, value : string) {
+	const higherValueCards =  cardSet.filter(card => values.indexOf(card.value)  > values.indexOf(value));
+	console.log('getting cards of higher value than ' + value + ' from ', cardSet);
+	console.log('returning ', higherValueCards);
+
+	return higherValueCards;
+}
+
+// returns all cards of a higher value than the specified value
+export const cardsLowerValueThan = function (cardSet: Array<Card>, value : string) {
+	const lowerValueCards =  cardSet.filter(card => values.indexOf(card.value)  < values.indexOf(value));
+	console.log('getting cards of lower value than ' + value + ' from ', cardSet);
+	console.log('returning ', lowerValueCards);
+	return lowerValueCards;
+}
+
+// returns all cards of given suit. 
 // example: suit = 'spades' returns a list of all spades in the hand
 export const getCardsOfSuit = function (hand: Array<Card>, suit: string) {
 	return hand.filter(card => card.suit === suit);	

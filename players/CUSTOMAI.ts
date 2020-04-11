@@ -28,7 +28,8 @@ import { noCardPlayed } from '../constants';
 //change this!  v
 export const customAI: Player = {
     id: 'CUSTOMAI', // rename the ID of your AI e.g. 'TobbeAI'
-    debugLog: true,
+    debugLog: false, // if you want your AI to have some extra logging you can use this flag:  if(this.debugLog)console.log("my hand", hand);
+    state: {}, // if your AI wants to use a custom state, for example to remember things between rounds/sets, you can use this property. Example: state.lastCardPlayed = card;
 
     bet: function (hand: Array<Card>, roundState: RoundState, playerId: string): number {
         // this AI will bet a random number
@@ -38,5 +39,9 @@ export const customAI: Player = {
     playCard: function (hand: Array<Card>, roundState: RoundState, playerId: string):Card {
         // this AI will pick a random card to play
 	    return utils.getRandomCardFromHand(hand, roundState.currentSet.suit);
-    }    
+    } ,
+
+    roundResult: function (result : PlayerRoundState) {
+
+    }
 }
