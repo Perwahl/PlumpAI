@@ -10,6 +10,7 @@ import { noCardPlayed } from '../constants';
         export const customAI: Player should become export const customAI: Player
     3) write the bet function, it should return a number between 0 and amount of cards in your hand
     4) write the playCard function, it should return a card from yout hand
+    5) the roundResult function allows you to check how the round went but this function doesnt matter for the game
     TIPS AND TRIX
     utils contains some helper functions to e.g. get all cards of a specific suit
     roundState contains all visible information about the current round
