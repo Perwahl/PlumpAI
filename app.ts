@@ -21,10 +21,11 @@ import { simpleAI } from './players/SimpleAI';
 import { randomAI } from './players/randomAI';
 import { customAI } from './players/CUSTOMAI';
 
+
 const simulationConfig: SimulationConfig = {
-    gamesToRun: 100,
+    gamesToRun: 1000,
     debugLogs: false,
-    playersConfig: [customAI, randomAI, simpleAI, simpleAI, simpleAI]
+    playersConfig: [customAI, simpleAI, simpleAI, simpleAI, simpleAI]
 }
 
 /******************** NO NEED TO CHANGE ANY CODE BELOW THIS LINE **********************/
